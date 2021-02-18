@@ -12,7 +12,7 @@ const client = redis.createClient({
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASS,
 })
-const { userJoin, userLeave } = require('./utils/users')
+const { users, userLogin, userLogout } = require('./utils/users')
 const { parseCookie } = require('./utils/cookieParser')
 
 client.on('error', (error) => {
@@ -40,9 +40,11 @@ io.use((socket, next) => {
     })
   }
 }).on('connection', (socket) => {
-  userJoin(socket)
+  console.log({ users })
+  userLogin(socket)
 
-  io.on('disconnect', (socket) => {
-    userLeave(socket)
+  socket.on('disconnect', (socket) => {
+    console.log('disconnect...')
+    userLogout(socket)
   })
 })

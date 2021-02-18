@@ -1,11 +1,11 @@
 const users = []
 
-function userJoin({ id, user_id, username }) {
+function userLogin({ id, user_id, username }) {
   const user = { id, user_id, username }
-  users.push(user)
+  if (!users.some((el) => el.user_id === user.user_id)) users.push(user)
 }
 
-function userLeave(socket) {
+function userLogout(socket) {
   const index = users.findIndex((user) => user.id === socket.id)
   if (index !== -1) {
     users.splice(index, 1)[0]
@@ -13,6 +13,7 @@ function userLeave(socket) {
 }
 
 module.exports = {
-  userJoin,
-  userLeave,
+  users,
+  userLogin,
+  userLogout,
 }
